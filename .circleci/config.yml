@@ -11,6 +11,11 @@ jobs:
     docker:
       # Specify the version you desire here
       - image: cimg/php:8.1.7-browsers
+      environment:
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_DB: DemoAutomationTest
+          MYSQL_USER: root
+          MYSQL_PASSWORD:12345678
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -20,6 +25,11 @@ jobs:
       # - image: circleci/mysql:5.7-ram
       #
       # - image: redis:2.8.19
+      - image: mysql:5.7
+        command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin --innodb-large-prefix=true --innodb-file-format=Barracuda
+        environment:
+          MYSQL_USER: root
+          MYSQL_PASSWORD: 12345678
 
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
@@ -54,7 +64,9 @@ jobs:
             - node_modules
 
       # prepare the database
-      - run: touch storage/testing.sqlite
+      - run:
+          name: Mysql database
+          command: mysql  -h 127.0.0.1 -u root -e "create database DemoAutomationTest;"
       - run: php artisan migrate --env=testing --database=sqlite_testing --force
 
       # run tests with phpunit or codecept
