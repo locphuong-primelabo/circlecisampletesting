@@ -11,6 +11,14 @@ jobs:
     docker:
       # Specify the version you desire here
       - image: cimg/php:8.1.7
+      - image: mysql:8.0
+      command:
+       mysqld --default-authentication-plugin=mysql_native_password
+       --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+       --log-bin-trust-function-creators=true
+      environment:
+       MYSQL_DATABASE: DemoAutomationTest
+       MYSQL_ROOT_PASSWORD: 12345678
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
@@ -19,12 +27,8 @@ jobs:
       # - image: circleci/mysql:5.7-ram
       #
       # - image: redis:2.8.19
-      - image: mysql:5.7
-        environment:
-          MYSQL_PASSWORD: 12345678
-          MYSQL_RANDOM_ROOT_PASSWORD: 12345678
-          YSQL_ALLOW_EMPTY_PASSWORD: false
-          MYSQL_ROOT_PASSWORD: 12345678
+      ports:
+      - "3306:3306"
 
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
