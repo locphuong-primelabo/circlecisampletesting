@@ -15,9 +15,9 @@ jobs:
         environment:
           MYSQL_ALLOW_EMPTY_PASSWORD: true
           MYSQL_DATABASE: DemoAutomationTest
-          MYSQL_ROOT_PASSWORD: 12345678
-          MYSQL_USER: usrooter
-          MYSQL_PASSWORD: passw0rd
+          MYSQL_ROOT_PASSWORD: 
+          MYSQL_USER: root
+          MYSQL_PASSWORD: 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
