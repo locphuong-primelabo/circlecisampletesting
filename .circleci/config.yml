@@ -59,6 +59,9 @@ jobs:
 
       # prepare the database
       - run: sudo apt-get install mysql-client
+      - run: php artisan config:clear
+      - run: php artisan cache:clear
+      - run: php artisan migrate
       - run: php artisan test --testsuite=Feature
 
       # run tests with phpunit or codecept
