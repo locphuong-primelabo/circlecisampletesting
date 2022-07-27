@@ -60,9 +60,6 @@ jobs:
 
       # prepare the database
       - run: sudo apt-get install mysql-client
-      - run:
-         name: Mysql database
-         command: mysql  -h 127.0.0.1 -u usrooter -ppassw0rd -e "create database DemoAutomationTest;"
       - run: php artisan test --testsuite=Feature
 
       # run tests with phpunit or codecept
