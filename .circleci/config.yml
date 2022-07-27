@@ -15,6 +15,7 @@ jobs:
         environment:
           MYSQL_ALLOW_EMPTY_PASSWORD: true
           MYSQL_DATABASE: DemoAutomationTest
+          MYSQL_USER: forge
           MYSQL_ROOT_PASSWORD: 
           MYSQL_PASSWORD: 
       # Specify service dependencies here if necessary
