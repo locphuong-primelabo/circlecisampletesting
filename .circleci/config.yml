@@ -17,6 +17,7 @@ jobs:
           MYSQL_DATABASE: DemoAutomationTest
           MYSQL_ROOT_PASSWORD: 12345678
           MYSQL_USER: usrooter
+          MYSQL_PASSWORD: passw0rd
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
@@ -61,7 +62,7 @@ jobs:
       - run: sudo apt-get install mysql-client
       - run:
          name: Mysql database
-         command: mysql  -h 127.0.0.1 -u root -p12345678 -e "create database DemoAutomationTest;"
+         command: mysql  -h 127.0.0.1 -u usrooter -ppassw0rd -e "create database DemoAutomationTest;"
       - run: php artisan test --testsuite=Feature
 
       # run tests with phpunit or codecept
