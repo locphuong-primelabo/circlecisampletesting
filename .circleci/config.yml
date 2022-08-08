@@ -41,18 +41,9 @@ jobs:
             composer install
       - run: php artisan migrate:fresh --seed 
       - run: php artisan key:generate
-
-      - run: 
-          name: install init node_modules test font-end
-          command: |
-            npm install
-            npm run build
       - run: 
           name: Execute unit test
-          # command: php artisan test --testsuite=Feature 'tests/Feature/Http/Controllers/PostControllerTest.php'
-          command: |
-            mkdir -p ~/reports
-            phpdbg -qrr ./vendor/bin/phpunit --log-junit ./reports/junit.xml tests
+          command: php artisan test --testsuite=Feature 'tests/Feature/Http/Controllers/PostControllerTest.php'
       - run: 
           name: Setup and run lint
           command: |
