@@ -42,9 +42,9 @@ jobs:
           command: php -r "file_exists('.env') || copy('.env.example', '.env');"
      - run: php artisan migrate:fresh --seed  --force
      - run: php artisan key:generate
-     - run:
-         name: Check convention PHP
-         command: phpcs --standard=Framgia app
+    #  - run:
+    #      name: Check convention PHP
+    #      command: phpcs --standard=Framgia app
      - run:
          name: Check connection database
          command: framgia-ci test-connect 127.0.0.1 3306 60
