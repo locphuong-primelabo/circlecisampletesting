@@ -10,7 +10,6 @@ jobs:
          MYSQL_USER: test
          MYSQL_ROOT_PASSWORD: 12345678
          MYSQL_DATABASE: DemoAutomationTest
-   working_directory: ~/laravel
    steps:
      - checkout
      - run:
