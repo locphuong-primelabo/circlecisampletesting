@@ -16,11 +16,10 @@ jobs:
      - run:
          name: Install PHP exts
          command: |
-           sudo apt-get update && sudo apt-get dist-upgrade
            sudo docker-php-ext-install zip
            sudo docker-php-ext-install pdo_mysql
            sudo apt update 
-           sudo apt install mysql-server
+           sudo apt install default-mysql-client
      - run: sudo composer self-update
 
      # Download and cache dependencies
