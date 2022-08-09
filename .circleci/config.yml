@@ -10,7 +10,7 @@ jobs:
          MYSQL_USER: forge
          MYSQL_ROOT_PASSWORD: ''
          MYSQL_DATABASE: laravel
-   steps:
+   steps: 
      - checkout
      - run:
          name: Install PHP exts
