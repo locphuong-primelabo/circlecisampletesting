@@ -48,7 +48,7 @@ jobs:
      - run: php artisan migrate --seed --env=testing
      - run: ./vendor/bin/phpunit
      - run: php artisan test --testsuite=Feature 'tests/Feature/Http/Controllers/PostControllerTest.php'
- 
+  
 workflows:
  version: 2
  notify_deploy:
