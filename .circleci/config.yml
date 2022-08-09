@@ -21,22 +21,25 @@ jobs:
            sudo apt install default-mysql-client
      - run: sudo composer self-update
 
-    #  # Download and cache dependencies
-    #  - restore_cache:
-    #      keys:
-    #      - v1-dependencies-{{ checksum "composer.json" }}
-    #      # fallback to using the latest cache if no exact match is found
-    #      - v1-dependencies-
+     # Download and cache dependencies
+     - restore_cache:
+         keys:
+         - v1-dependencies-{{ checksum "composer.json" }}
+         # fallback to using the latest cache if no exact match is found
+         - v1-dependencies-
 
-    #  - save_cache:
-    #      paths:
-    #        - ./vendor
-    #      key: v1-dependencies-{{ checksum "composer.json" }}
+     - save_cache:
+         paths:
+           - ./vendor
+         key: v1-dependencies-{{ checksum "composer.json" }}
      - run: 
           name: Run composer
           command: |
             composer update
             composer install
+     - run: 
+          name: Create file env
+          command: php -r "file_exists('.env') || copy('.env.example', '.env');"
      - run: php artisan migrate:fresh --seed  --force
      - run: php artisan key:generate
      - run:
