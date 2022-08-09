@@ -7,9 +7,9 @@ jobs:
      - image: circleci/mysql:5.7
        environment:
          MYSQL_ALLOW_EMPTY_PASSWORD: yes
-         MYSQL_USER: test
-         MYSQL_ROOT_PASSWORD: 12345678
-         MYSQL_DATABASE: DemoAutomationTest
+         MYSQL_USER: root
+         MYSQL_ROOT_PASSWORD: ''
+         MYSQL_DATABASE: laravel
    steps:
      - checkout
      - run:
@@ -48,7 +48,7 @@ jobs:
      - run: php artisan migrate --seed --env=testing
      - run: ./vendor/bin/phpunit
      - run: php artisan test --testsuite=Feature 'tests/Feature/Http/Controllers/PostControllerTest.php'
-
+ 
 workflows:
  version: 2
  notify_deploy:
