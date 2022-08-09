@@ -50,7 +50,11 @@ jobs:
     #      command: framgia-ci test-connect 127.0.0.1 3306 60
     #  - run: php artisan migrate --seed --env=testing
     #  - run: ./vendor/bin/phpunit 
-     - run: php artisan test --testsuite=Feature 'tests/Feature/Http/Controllers/PostControllerTest.php'
+     - run: 
+          name: unit test
+          command: |
+            mkdir -p ~/reports
+            phpdbg -qrr ./vendor/bin/phpunit --log-junit ./reports/junit.xml tests
   
 workflows:
  version: 2
