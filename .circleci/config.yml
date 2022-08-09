@@ -33,9 +33,6 @@ jobs:
            - ./vendor
          key: v1-dependencies-{{ checksum "composer.json" }}
      - run: 
-          name: Create file env
-          command: php -r "file_exists('.env') || copy('.env.example', '.env');"
-     - run: 
           name: Run composer
           command: |
             composer update
