@@ -34,6 +34,16 @@ jobs:
            - ./vendor
          key: v1-dependencies-{{ checksum "composer.json" }}
      - run: php artisan key:generate --env=testing
+     - run: 
+          name: Create file env
+          command: php -r "file_exists('.env') || copy('.env.example', '.env');"
+     - run: 
+          name: Run composer
+          command: |
+            composer update
+            composer install
+     - run: php artisan migrate:fresh --seed 
+     - run: php artisan key:generate
      - run:
          name: Check convention PHP
          command: phpcs --standard=Framgia app
@@ -41,10 +51,6 @@ jobs:
          name: Check connection database
          command: framgia-ci test-connect 127.0.0.1 3306 60
      - run: php artisan migrate --seed --env=testing
-     - run:
-         name: Setup Laravel stuffs
-         command: |
-           php artisan migrate --force
      - run: ./vendor/bin/phpunit
      - run: php artisan test --testsuite=Feature 'tests/Feature/Http/Controllers/PostControllerTest.php'
 
