@@ -1,63 +1,56 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine.
-# See: https://circleci.com/docs/2.0/configuration-reference
-version: 2.1
-
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
-
+version: 2
 jobs:
-  say-hello:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
-    docker:
-      - image: circleci/php:8
-      - image: circleci/mysql:5.7
-        environment:
-          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-          MYSQL_DATABASE: laravel
-      - image: circleci/node:14
+ build:
+   docker:
+     # Specify the version you desire here
+     - image: circleci/php:8
+     - image: circleci/mysql:5.7
+       environment:
+         MYSQL_ALLOW_EMPTY_PASSWORD: yes
+         MYSQL_USER: root
+         MYSQL_ROOT_PASSWORD: 12345678
+         MYSQL_DATABASE: DemoAutomationTest
+   working_directory: ~/laravel
+   steps:
+     - checkout
+     - run:
+         name: Install PHP exts
+         command: |
+           sudo docker-php-ext-install zip
+           sudo docker-php-ext-install pdo_mysql
+           sudo apt install -y mysql-client
+     - run: sudo composer self-update
 
-    steps:
-      - checkout
-      - run:
-          name: Create connect between mysql and laravel
-          command: |
-            sudo docker-php-ext-install pdo_mysql
-            sudo docker-php-ext-enable pdo_mysql 
-      - run: sudo apt-get update && sudo apt-get install npm
-      - run: 
-          name: Create database
-          command: |
-            mkdir -p database
-            touch database/laravel.sqlite 
-      - run: 
-          name: Create file env
-          command: php -r "file_exists('.env') || copy('.env.example', '.env');"
+     # Download and cache dependencies
+     - restore_cache:
+         keys:
+         - v1-dependencies-{{ checksum "composer.json" }}
+         # fallback to using the latest cache if no exact match is found
+         - v1-dependencies-
 
-      - run: 
-          name: Run composer
-          command: |
-            composer update
-            composer install
-      - run: php artisan migrate:fresh --seed 
-      - run: php artisan key:generate
-      - run: 
-          name: install init node_modules test font-end
-          command: |
-            npm install
-            npm run build
-      - run: 
-          name: Execute unit test
-          command: php artisan test --testsuite=Feature 'tests/Feature/Http/Controllers/PostControllerTest.php'
-      - run: 
-          name: Setup and run lint
-          command: |
-            composer require overtrue/phplint --dev -vvv
-            ./vendor/bin/phplint
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+     - run: composer install -n --prefer-dist
+
+     - save_cache:
+         paths:
+           - ./vendor
+         key: v1-dependencies-{{ checksum "composer.json" }}
+     - run: php artisan key:generate --env=testing
+     - run:
+         name: Check convention PHP
+         command: phpcs --standard=Framgia app
+     - run:
+         name: Check connection database
+         command: framgia-ci test-connect 127.0.0.1 3306 60
+     - run: php artisan migrate --seed --env=testing
+     - run:
+         name: Setup Laravel stuffs
+         command: |
+           php artisan migrate --force
+     - run: ./vendor/bin/phpunit
+     - run: php artisan test --testsuite=Feature 'tests/Feature/Http/Controllers/PostControllerTest.php'
 
 workflows:
-  say-hello-workflow:
-    jobs:
-      - say-hello
+ version: 2
+ notify_deploy:
+   jobs:
+     - build
