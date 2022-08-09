@@ -37,7 +37,7 @@ jobs:
           command: |
             composer update
             composer install
-     - run: php artisan migrate:fresh --seed 
+     - run: php artisan migrate:fresh --seed  --force
      - run: php artisan key:generate
      - run:
          name: Check convention PHP
